@@ -115,7 +115,8 @@ You need:
    * **Take it from a published LunarisDolby module zip** — several exist on
      GitHub and XDA; the APK sits at
      `system/product/priv-app/LunarisDolby/LunarisDolby.apk` inside.
-   * **Build it from source** — <https://github.com/rony1duet/LunarisDolby>.
+   * **Build it from source** —
+     <https://github.com/project-sm7435/packages_apps_LunarisDolby>.
      Note it is a Soong package (`Android.bp`), not a Gradle project, so it
      builds inside an AOSP tree rather than standalone.
 
@@ -177,10 +178,38 @@ adb push tools/dolby-probe.sh /data/local/tmp/
 adb shell su -c 'sh /data/local/tmp/dolby-probe.sh' > probe.txt
 ```
 
+## For ROM maintainers
+
+The cleanest fix is upstream, not here. ROMs hit this by adopting a generic
+`hardware/dolby` tree instead of keeping the device's own vendor blobs, and
+several incompatible Dolby builds are in circulation:
+
+| | zorn stock | shipped by these ROMs | [Ghosuto/hardware_dolby][hw] |
+|---|---:|---:|---:|
+| `libhwdap.so` | 207,344 | 298,385 | 195,744 |
+| `libdlbpreg.so` | 28,336 | 72,505 | 24,208 |
+| `libdlbdsservice.so` | 471,408 | 610,577 | 459,136 |
+| `libdlbvol.so` | 15,264 | 67,721 | 15,264 |
+
+Mixing builds is what breaks it. The libraries talk to each other through
+private interfaces, so `libhwdap.so` from one set and `libdlbpreg.so` from
+another will load, register, and then fail — either by segfaulting the audio
+HAL outright or by silently dropping DSP parameter commits.
+
+If your tree targets zorn, ship the device's own blobs as a set. If you need
+a generic tree, ship all of it consistently and do not mix in per-device
+libraries. Note that `hardware/dolby` also carries `libswdap.so`, a software
+DAP that zorn's stock firmware does not include — so a device whose config
+expects the hardware DAP will not necessarily behave the same way with it.
+
+[hw]: https://github.com/Ghosuto/hardware_dolby
+
 ## Credits
 
 * Dolby control app: **@montfort_1607** — the module ships
-  [LunarisDolby](https://github.com/rony1duet/LunarisDolby) as its UI.
+  [LunarisDolby](https://github.com/project-sm7435/packages_apps_LunarisDolby)
+  as its UI.
+* ROM-side Dolby packaging: [Ghosuto/hardware_dolby][hw].
 * Dolby libraries: Dolby Laboratories, via Xiaomi's zorn firmware.
 
 ## Licence
