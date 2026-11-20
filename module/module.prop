@@ -5,3 +5,4 @@ versionCode=10200
 author=Merajul Islam
 description=Ported and modified from the Lunaris Dolby module by @montfort_1607 to work on zorn
 banner=banner.jpg
+updateJson=https://raw.githubusercontent.com/XLR8Labs-io/dolby-zorn/main/update.json
