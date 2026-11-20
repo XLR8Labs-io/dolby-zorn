@@ -112,9 +112,10 @@ You need:
    * **Pull it off a ROM that already ships it.** Many AOSP ROMs include it:
      `adb shell find /product /system_ext -iname 'LunarisDolby*.apk'`, then
      `adb pull` the result.
-   * **Take it from a published LunarisDolby module zip** — several exist on
-     GitHub and XDA; the APK sits at
-     `system/product/priv-app/LunarisDolby/LunarisDolby.apk` inside.
+   * **Take it from a published LunarisDolby module zip.** This module is
+     based on the *LunarisDolby [Port v2.0]* release posted to Telegram:
+     <https://t.me/garnetglobal/656>. The APK sits at
+     `system/product/priv-app/LunarisDolby/LunarisDolby.apk` inside the zip.
    * **Build it from source** —
      <https://github.com/project-sm7435/packages_apps_LunarisDolby>.
      Note it is a Soong package (`Android.bp`), not a Gradle project, so it
@@ -206,11 +207,17 @@ expects the hardware DAP will not necessarily behave the same way with it.
 
 ## Credits
 
-* Dolby control app: **@montfort_1607** — the module ships
-  [LunarisDolby](https://github.com/project-sm7435/packages_apps_LunarisDolby)
-  as its UI.
+* **@montfort_1607** (Telegram) — author of the *LunarisDolby [Port v2.0]*
+  module this one is based on: <https://t.me/garnetglobal/656>. Its
+  LunarisDolby app is shipped here as the Dolby UI.
+* LunarisDolby app source:
+  [project-sm7435/packages_apps_LunarisDolby](https://github.com/project-sm7435/packages_apps_LunarisDolby).
 * ROM-side Dolby packaging: [Ghosuto/hardware_dolby][hw].
 * Dolby libraries: Dolby Laboratories, via Xiaomi's zorn firmware.
+
+What this project adds on top of that base is the diagnosis and the fix for
+the mismatched vendor libraries, plus self-mounting for KernelSU builds that
+do not mount modules.
 
 ## Licence
 
