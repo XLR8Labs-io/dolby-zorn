@@ -1,0 +1,7 @@
+id=dolbyzorn
+name=Lunaris Dolby for K80/F7 Pro (zorn)
+version=v1.2
+versionCode=10200
+author=Merajul Islam
+description=Ported and modified from the Lunaris Dolby module by @montfort_1607 to work on zorn
+banner=banner.jpg

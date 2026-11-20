@@ -1,0 +1,14 @@
+# Build artifacts
+build/
+dist/
+
+# Proprietary Dolby libraries and the LunarisDolby app are never committed.
+# build.sh extracts them from firmware you supply. See README.
+module/payload/
+*.img
+*.apk
+*.zip
+
+# Firmware sources, in case anyone unpacks one inside the repo
+super.img*
+payload.bin
