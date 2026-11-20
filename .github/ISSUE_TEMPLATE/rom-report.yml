@@ -1,0 +1,98 @@
+name: ROM not supported
+description: The module refuses to install, or installs but does nothing, on your ROM
+title: "[ROM] "
+labels: ["rom-support"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Most reports come down to one of two things, and both are answered by
+        the fields below:
+
+        1. Your ROM reports the device name in a property the installer does
+           not check yet. Adding it is a one-line fix.
+        2. Your ROM strips Dolby from `/vendor` entirely, in which case this
+           module cannot help — it restores mismatched libraries, it does not
+           add missing ones.
+
+  - type: input
+    id: rom
+    attributes:
+      label: ROM and Android version
+      placeholder: "PixelOS 16, build 20261118"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: symptom
+    attributes:
+      label: What happens
+      options:
+        - Installer aborts with "This device reports: ..."
+        - Installer aborts with "No Dolby stack found"
+        - Installs fine, but no sound change
+        - Installs fine, but the Dolby app crashes
+        - Bootloop or audio broken after install
+        - Something else
+    validations:
+      required: true
+
+  - type: input
+    id: abort
+    attributes:
+      label: The exact abort line, if you got one
+      description: Copy it verbatim — the device name in it is what gets added.
+      placeholder: "! This device reports: mivendor"
+
+  - type: textarea
+    id: props
+    attributes:
+      label: Device properties
+      description: "`adb shell getprop | grep -iE 'device|sku'`"
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Mount log
+      description: "`adb shell su -c 'cat /data/adb/dolbyzorn.log'` — paste all of it, including ABORT or SKIP lines."
+      render: shell
+
+  - type: textarea
+    id: libs
+    attributes:
+      label: Dolby libraries on your ROM
+      description: |
+        Run this as root. It tells us whether your ROM ships the same
+        mismatched libraries, different ones, or none at all.
+
+        ```
+        adb shell su -c 'for f in lib64/soundfx/libhwdap.so lib64/soundfx/libdlbvol.so \
+          lib64/libdlbpreg.so lib64/libdlbdsservice.so bin/hw/vendor.dolby.media.c2@1.0-service; do \
+          echo "$f = $(stat -c %s /vendor/$f 2>/dev/null || echo ABSENT)"; done'
+        ```
+
+        Stock zorn is 207344 / 15264 / 28336 / 471408 / 11528.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: root
+    attributes:
+      label: Root solution and version
+      placeholder: "KernelSU Next 3.4.2"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before submitting
+      options:
+        - label: My device is zorn (Redmi K80 / POCO F7 Pro). This module is device-specific and will not work on anything else.
+          required: true
+        - label: I rebooted after installing before deciding it did not work.
+          required: true

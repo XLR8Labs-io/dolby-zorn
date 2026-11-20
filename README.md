@@ -102,8 +102,26 @@ You need:
 1. **Stock zorn firmware** — a HyperOS fastboot package. The build script
    wants either the directory containing its `super.img.*` chunks, or an
    already-extracted `vendor.img`.
-2. **LunarisDolby.apk** — the control app, by @montfort_1607. Upstream:
-   <https://github.com/rony1duet/LunarisDolby>
+2. **LunarisDolby.apk** — the control app, by @montfort_1607.
+
+   It is **not** redistributed here. Its upstream repositories declare no
+   licence at all, which means all rights reserved by default, so shipping
+   the APK would be on weaker ground than the Dolby libraries. Three ways to
+   obtain it, easiest first:
+
+   * **Pull it off a ROM that already ships it.** Many AOSP ROMs include it:
+     `adb shell find /product /system_ext -iname 'LunarisDolby*.apk'`, then
+     `adb pull` the result.
+   * **Take it from a published LunarisDolby module zip** — several exist on
+     GitHub and XDA; the APK sits at
+     `system/product/priv-app/LunarisDolby/LunarisDolby.apk` inside.
+   * **Build it from source** — <https://github.com/rony1duet/LunarisDolby>.
+     Note it is a Soong package (`Android.bp`), not a Gradle project, so it
+     builds inside an AOSP tree rather than standalone.
+
+   Any recent build works; the module only needs the package to exist as a
+   priv-app so something can instantiate the Dolby effect.
+
 3. `simg2img` and `lpunpack` (Arch: `android-tools`), plus either
    `erofs-utils` or a desktop with `udisksctl` for rootless mounting.
 
