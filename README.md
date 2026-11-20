@@ -197,6 +197,22 @@ private interfaces, so `libhwdap.so` from one set and `libdlbpreg.so` from
 another will load, register, and then fail — either by segfaulting the audio
 HAL outright or by silently dropping DSP parameter commits.
 
+Two specifics from `hardware/dolby`'s `dolby.mk` that explain the crash:
+
+* It adds **`libstagefright_foundation-v33`** to `PRODUCT_PACKAGES`. Stock
+  zorn vendor contains no `libstagefright_foundation` at all — verified
+  against the firmware. Dolby libraries built against that shim, dropped onto
+  a device whose vendor lacks it, are what hands `QdspDriver` a garbage
+  `ALooper` pointer.
+* It sets `ro.vendor.dolby.dax.version=DAX3_3.7.0.8_r1`. zorn runs
+  **DAX3_3.8.5.20_r1** — a different DAX generation, so these are not
+  drop-in replacements for each other in either direction.
+
+It also copies its own `configs/dax/dax-default.xml` over
+`vendor/etc/dolby/dax-default.xml`, replacing the device's speaker tuning
+with a generic one. Worth checking if your build sounds wrong: zorn's stock
+file is 91,440 bytes, and its spatializer counterpart 23,737.
+
 If your tree targets zorn, ship the device's own blobs as a set. If you need
 a generic tree, ship all of it consistently and do not mix in per-device
 libraries. Note that `hardware/dolby` also carries `libswdap.so`, a software
