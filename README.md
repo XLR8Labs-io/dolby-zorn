@@ -102,7 +102,8 @@ You need:
 1. **Stock zorn firmware** — a HyperOS fastboot package. The build script
    wants either the directory containing its `super.img.*` chunks, or an
    already-extracted `vendor.img`.
-2. **LunarisDolby.apk** — the control app, by @montfort_1607.
+2. **LunarisDolby.apk** — the Dolby UI. See [Credits](#credits) for its
+   authors.
 
    It is **not** redistributed here. Its upstream repositories declare no
    licence at all, which means all rights reserved by default, so shipping
@@ -117,7 +118,7 @@ You need:
      <https://t.me/garnetglobal/656>. The APK sits at
      `system/product/priv-app/LunarisDolby/LunarisDolby.apk` inside the zip.
    * **Build it from source** —
-     <https://github.com/project-sm7435/packages_apps_LunarisDolby>.
+     <https://github.com/crdroidandroid/android_packages_apps_LunarisDolby>.
      Note it is a Soong package (`Android.bp`), not a Gradle project, so it
      builds inside an AOSP tree rather than standalone.
 
@@ -223,17 +224,28 @@ expects the hardware DAP will not necessarily behave the same way with it.
 
 ## Credits
 
-* **@montfort_1607** (Telegram) — author of the *LunarisDolby [Port v2.0]*
-  module this one is based on: <https://t.me/garnetglobal/656>. Its
-  LunarisDolby app is shipped here as the Dolby UI.
-* LunarisDolby app source:
-  [project-sm7435/packages_apps_LunarisDolby](https://github.com/project-sm7435/packages_apps_LunarisDolby).
-* ROM-side Dolby packaging: [Ghosuto/hardware_dolby][hw].
+This module is packaging and a bug fix. The Dolby UI it ships, LunarisDolby,
+is other people's work — per the app's own Credits dialog:
+
+* **Ghost** ([@Ghosuto](https://github.com/Ghosuto)) — rewrote Dolby in
+  Compose, creating LunarisDolby. Also maintains [hardware_dolby][hw].
+* **Adithya R** ([@adithya2306](https://github.com/adithya2306)) — AOSPA
+  Dolby Manager, the initial code LunarisDolby grew from.
+* **kenway** ([@kenway214](https://github.com/kenway214)) — bass and treble
+  changes, EQ tuning.
+* **tranQuila** ([@MrTopia](https://github.com/MrTopia)) — per-device Dolby
+  state memory.
+
+* **@montfort_1607** (Telegram) — the *LunarisDolby [Port v2.0]* module this
+  one is based on: <https://t.me/garnetglobal/656>.
+
+* App source:
+  [crdroidandroid/android_packages_apps_LunarisDolby](https://github.com/crdroidandroid/android_packages_apps_LunarisDolby)
 * Dolby libraries: Dolby Laboratories, via Xiaomi's zorn firmware.
 
-What this project adds on top of that base is the diagnosis and the fix for
-the mismatched vendor libraries, plus self-mounting for KernelSU builds that
-do not mount modules.
+What this project adds is the diagnosis and the fix for the mismatched
+vendor libraries, plus self-mounting for KernelSU builds that do not mount
+modules.
 
 ## Licence
 
